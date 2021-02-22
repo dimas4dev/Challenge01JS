@@ -56,59 +56,29 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      let divs = document.getElementsByClassName("key");
-      let audios = document.getElementsByTagName("audio");
-      console.log(audios);
-      // IIFE
-      // (()=>{
+      function playSound(event) {
+        const audio = document.querySelector(
+          `audio[data-key="${event.keyCode}"]`
+        );
+        const key = document.querySelector(`div[data-key="${event.keyCode}"]`);
+        if (!audio) return;
+        audio.currentTime = 0; //rewind to the start
+        audio.play();
 
-      // })()
+        key.classList.add("playing");
 
-      for (let i = 0; i < divs.length; i++) {
-        divs[i].addEventListener("click", () => {
-          let divKey = divs[i].dataset.key;
+        function removeTransition(event) {
+          if (event.propertyName !== "transform") return;
+          this.classList.remove("playing");
+        }
+        const keys = document.querySelectorAll(".key");
 
-          console.log(divKey);
-          switch (divKey) {
-            case 65:
-              console.log("Escribiste el 65");
-              audios[0].play();
-              break;
-            case 83:
-              console.log("Escribiste el 83");
-              audios[1].play();
-              break;
-            case 68:
-              console.log("Escribiste el 68");
-              audios[2].play();
-              break;
-            case 70:
-              console.log("Escribiste el 70");
-              audios[3].play();
-              break;
-            case 71:
-              console.log("Escribiste el 71");
-              audios[4].play();
-              break;
-            case 72:
-              console.log("Escribiste el 72");
-              audios[5].play();
-              break;
-            case 74:
-              console.log("Escribiste el 74");
-              audios[6].play();
-              break;
-            case 75:
-              console.log("Escribiste el 75");
-              audios[7].play();
-              break;
-            case 76:
-              console.log("Escribiste el 76");
-              audios[8].play();
-              break;
-          }
-        });
+        keys.forEach((key) =>
+          key.addEventListener("transitionend", removeTransition)
+        );
       }
+
+      window.addEventListener("keydown", playSound);
     </script>
   </body>
 </html>
